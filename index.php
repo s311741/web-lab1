@@ -12,6 +12,7 @@
 			}
 
 			.content {
+				max-width: 100%;
 				width: 90%;
 				margin: auto;
 			}
@@ -88,13 +89,15 @@
 						$hit = false;
 						$correct = true;
 
-						if ($x < -3 || $x > 5 || $y < -5 || $y > 5) {
-							echo "Точка (".$x.", ".$y.") задана некорректно";
+						if (strlen($x) > 2 || strlen($y) > 2
+						 || $x < -3 || $x > 5 || $y < -5 || $y > 5) {
+							echo "Точка задана некорректно";
 							$correct = false;
 						}
 
-						if ($r < 0 || $r > 4) {
-							echo "Радиус ".$r." задан некорректно";
+						if (strlen($r) > 2
+						 || $r < 0 || $r > 4) {
+							echo "Радиус задан некорректно";
 							$correct = false;
 						}
 
@@ -109,7 +112,7 @@
 					<form name="params" method="get" onsubmit="return validate();">
 						<table>
 							<tr>
-								<td>Изменение X</td>
+								<td>X</td>
 								<td>
 									<?php
 										for ($i = -3; $i <= 5; $i++)
@@ -118,7 +121,7 @@
 								</td>
 							</tr>
 							<tr>
-								<td>Изменение Y</td>
+								<td>Y</td>
 								<td><input type="text" name="y"></td>
 							</tr>
 							<tr>
@@ -220,12 +223,18 @@
 
 			function validate () {
 				const form = document.forms["params"];
-				const y = +form["y"].value;
-				const r = +form["r"].value;
-				if (isNaN(y) || y < -5 || y > 5)
+
+				const y = form["y"].value.trim();
+				if (y.length > 2 || isNaN(+y) || +y < -5 || +y > 5) {
+					alert("Y - целое число от -5 до 5");
 					return false;
-				if (isNaN(r) || r < 1 || r > 4)
+				}
+
+				const r = form["r"].value.trim();
+				if (r.length > 2 || isNaN(+r) || +r < 1 || +r > 4) {
+					alert("Радиус - целое число от 1 до 4");
 					return false;
+				}
 				return true;
 			}
 
